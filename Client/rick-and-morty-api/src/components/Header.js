@@ -1,13 +1,13 @@
-import React from 'react';
-import { Link } from 'react-router-dom'; 
-import { motion } from 'framer-motion'; 
-import bannerImage from '../assets/Shape4.png'; 
-import logoImage from '../assets/Logo.png'; 
-import Nav from './Nav';
+import React from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
+import bannerImage from "../assets/Shape4.png";
+import logoImage from "../assets/Logo.png";
+import Nav from "./Nav";
 
 const Header = ({ title }) => {
   return ( 
-    <motion.Header
+    <motion.header
       initial={{ opacity: 0, y: -50 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -50 }}
@@ -27,7 +27,7 @@ const Header = ({ title }) => {
         </div>
         <Nav />
       </div>
-    </motion.Header>
+    </motion.header>
   );
 };
 

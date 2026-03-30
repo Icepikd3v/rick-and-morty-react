@@ -4,14 +4,14 @@ const SearchResultCard = ({ character }) => {
   const { name, status, species, gender, location, image } = character;
 
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg bg-gray-300 bg-opacity-75 text-black">
-      <img src={image} alt={name} className="w-full" />
-      <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">{name}</div>
+    <div className="rm-character-card">
+      <img src={image} alt={name} className="rm-character-image" />
+      <div className="rm-character-meta">
+        <div className="rm-character-title">{name}</div>
         <p>Status: {status}</p>
         <p>Species: {species}</p>
         <p>Gender: {gender}</p>
-        <p>Location: {location.name}</p>
+        <p>Location: {location?.name || "Unknown"}</p>
       </div>
     </div>
   );
