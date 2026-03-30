@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SearchResultsCard from "../components/SearchResultCard";
-import { demoCharacters } from "../constants/demoCharacters";
 
-const SearchPage = () => {
+const SearchPage = ({ apiBaseUrl }) => {
   const [queryInput, setQueryInput] = useState("");
   const [query, setQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
@@ -20,7 +19,7 @@ const SearchPage = () => {
 
       try {
         const response = await fetch(
-          `https://rickandmortyapi.com/api/character/?name=${encodeURIComponent(query)}&page=${page}`,
+          `${apiBaseUrl}/characters/search?name=${encodeURIComponent(query)}&page=${page}`,
         );
         if (!response.ok) {
           throw new Error("Failed to fetch data");
@@ -29,16 +28,9 @@ const SearchPage = () => {
         setSearchResults(data.results || []);
         setTotalPages(data.info?.pages || 1);
       } catch {
-        // Demo fallback so showcase remains usable when API is unavailable.
-        const normalized = query.toLowerCase();
-        const fallback = demoCharacters.filter((item) =>
-          item.name.toLowerCase().includes(normalized),
-        );
-        setSearchResults(fallback);
+        setSearchResults([]);
         setTotalPages(1);
-        setError(
-          "Live API unavailable right now. Showing local demo characters instead.",
-        );
+        setError("Live API search unavailable right now.");
       } finally {
         setSearched(true);
         setIsLoading(false);
@@ -46,7 +38,7 @@ const SearchPage = () => {
     };
 
     fetchSearchResults();
-  }, [query, page]);
+  }, [apiBaseUrl, query, page]);
 
   const handleSearchSubmit = (event) => {
     event.preventDefault();

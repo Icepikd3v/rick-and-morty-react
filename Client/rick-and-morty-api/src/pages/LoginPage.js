@@ -1,18 +1,34 @@
 import React, { useState } from "react";
-import { DEMO_EMAIL, DEMO_PASSWORD } from "../constants/demoAuth";
 
-const LoginPage = ({ onLogin }) => {
+const LoginPage = ({ onLogin, apiBaseUrl }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [mode, setMode] = useState("login");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    if (!onLogin(email, password)) {
-      setError("Invalid demo credentials. Please use the credentials shown below.");
-      return;
-    }
     setError("");
+    setIsLoading(true);
+    try {
+      const endpoint = mode === "signup" ? "signup" : "login";
+      const response = await fetch(`${apiBaseUrl}/auth/${endpoint}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!response.ok) {
+        const payload = await response.json().catch(() => ({}));
+        throw new Error(payload.message || "Authentication failed");
+      }
+      const payload = await response.json();
+      onLogin(payload);
+    } catch (authError) {
+      setError(authError.message || "Authentication failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -21,7 +37,7 @@ const LoginPage = ({ onLogin }) => {
         <p className="rm-eyebrow">Frontend Demo Access</p>
         <h1>Rick and Morty Character Console</h1>
         <p className="rm-muted">
-          Login to explore character search, pagination, and submit-page flows in demo-safe mode.
+          Sign in to run live character search and persist your own submissions with image uploads.
         </p>
         <form className="rm-login-form" onSubmit={handleSubmit}>
           <input
@@ -38,11 +54,17 @@ const LoginPage = ({ onLogin }) => {
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
           />
-          <p className="rm-demo-creds">
-            Demo login: <strong>{DEMO_EMAIL}</strong> / <strong>{DEMO_PASSWORD}</strong>
-          </p>
           {error ? <p className="rm-error">{error}</p> : null}
-          <button type="submit">Enter Demo Mode</button>
+          <button type="submit" disabled={isLoading}>
+            {isLoading ? "Please wait..." : mode === "signup" ? "Create Account" : "Login"}
+          </button>
+          <button
+            type="button"
+            className="rm-secondary-btn"
+            onClick={() => setMode((current) => (current === "signup" ? "login" : "signup"))}
+          >
+            {mode === "signup" ? "Have an account? Login" : "Need an account? Sign up"}
+          </button>
         </form>
       </div>
     </div>

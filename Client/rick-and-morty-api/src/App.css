@@ -29,6 +29,17 @@ body {
   margin: 0.7rem auto 0;
   display: flex;
   justify-content: flex-end;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rm-login-pill {
+  border: 1px solid #385d53;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+  background: rgba(16, 44, 35, 0.8);
+  color: #c7dfd4;
+  font-size: 0.82rem;
 }
 
 .rm-logout-btn {
@@ -137,6 +148,12 @@ body {
 .rm-pagination button:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+.rm-secondary-btn {
+  background: #173028 !important;
+  color: #c8f1d4 !important;
+  border-color: #3b6c5f !important;
 }
 
 .rm-demo-creds {
